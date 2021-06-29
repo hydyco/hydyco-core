@@ -1,5 +1,5 @@
 {
-  "include": ["src", "index.ts"],
+  "include": ["src", "src/index.ts"],
   "exclude": [
     "node_modules",
     "./node_modules",
@@ -10,7 +10,7 @@
     "target": "es5",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "./",
     "strict": true,
     "sourceMap": true,
     "skipLibCheck": true
