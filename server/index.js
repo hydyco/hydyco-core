@@ -7,6 +7,17 @@ exports.HydycoServer = void 0;
  */
 var app_1 = require("@tinyhttp/app");
 var logger_1 = require("@tinyhttp/logger");
+var bodyParser = function (request, response, next) {
+    var body = "";
+    request.on("data", function (chuck) {
+        body += chuck;
+    });
+    request.on("end", function () {
+        body = body.length > 0 ? JSON.parse(body) : undefined;
+        request.body = body;
+        next();
+    });
+};
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
         if (serverConfig === void 0) { serverConfig = {
@@ -18,6 +29,9 @@ var HydycoServer = /** @class */ (function () {
          * Init tinyhttp server
          */
         this._hydycoServer = new app_1.App({
+            applyExtensions: function (req, res, next) {
+                bodyParser(req, res, next);
+            },
             noMatchHandler: function (req, res) {
                 return res.status(404).end("Not found :(");
             },

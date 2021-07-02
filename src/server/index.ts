@@ -2,7 +2,7 @@
  * Server for hydyco
  * Powered by tinyhttp https://tinyhttp.v1rtl.site/
  */
-import { App, Request, Response } from "@tinyhttp/app";
+import { App, NextFunction, Request, Response } from "@tinyhttp/app";
 import { logger } from "@tinyhttp/logger";
 
 export interface IServerConfig {
@@ -10,11 +10,31 @@ export interface IServerConfig {
   logger: boolean;
 }
 
+const bodyParser = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  let body = "";
+  request.on("data", (chuck) => {
+    body += chuck;
+  });
+
+  request.on("end", () => {
+    body = body.length > 0 ? JSON.parse(body) : undefined;
+    request.body = body;
+    next();
+  });
+};
+
 export class HydycoServer {
   /**
    * Init tinyhttp server
    */
   private _hydycoServer: App = new App({
+    applyExtensions: (req: Request, res: Response, next: NextFunction) => {
+      bodyParser(req, res, next);
+    },
     noMatchHandler: (req: Request, res: Response) =>
       res.status(404).end("Not found :("),
     onError: (err, req, res) => {

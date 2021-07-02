@@ -41,14 +41,14 @@ export default class PathUtils {
    * Hydyco folder dir , it stores all the files related to hydyco.io
    */
   get hydycoDir(): string {
-    return path.join(this._rootPath, ".hydyco", "mappings");
+    return path.join(this._rootPath, ".hydyco");
   }
 
   /**
    * Hydyco mapping dir , it stores all the mapping files. Json file that store information used by plugins
    */
   get hydycoMappingDir(): string {
-    return path.join(this._rootPath, ".hydyco");
+    return path.join(this._rootPath, ".hydyco", "mappings");
   }
 
   /**

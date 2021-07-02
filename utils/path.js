@@ -56,7 +56,7 @@ var PathUtils = /** @class */ (function () {
          * Hydyco folder dir , it stores all the files related to hydyco.io
          */
         get: function () {
-            return path.join(this._rootPath, ".hydyco", "mappings");
+            return path.join(this._rootPath, ".hydyco");
         },
         enumerable: false,
         configurable: true
@@ -66,7 +66,7 @@ var PathUtils = /** @class */ (function () {
          * Hydyco mapping dir , it stores all the mapping files. Json file that store information used by plugins
          */
         get: function () {
-            return path.join(this._rootPath, ".hydyco");
+            return path.join(this._rootPath, ".hydyco", "mappings");
         },
         enumerable: false,
         configurable: true
