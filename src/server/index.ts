@@ -77,7 +77,7 @@ export class HydycoServer {
    * @param {App} - Instance of tinyhttp app or express app or even node http server
    */
   registerDatabase(database: App) {
-    this._dbAdded = false;
+    this._dbAdded = true;
     this._db = database;
   }
 

@@ -62,7 +62,7 @@ var HydycoServer = /** @class */ (function () {
      * @param {App} - Instance of tinyhttp app or express app or even node http server
      */
     HydycoServer.prototype.registerDatabase = function (database) {
-        this._dbAdded = false;
+        this._dbAdded = true;
         this._db = database;
     };
     /**
