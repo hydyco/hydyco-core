@@ -17,7 +17,22 @@ export declare class HydycoServer {
      * Check if server is running or not
      */
     private _isServerStarted;
+    /**
+     * check if database is configured or not
+     */
+    private _dbAdded;
+    /**
+     * configuration
+     */
+    private _db;
+    private _plugins;
     constructor(serverConfig?: IServerConfig);
+    /**
+     * Register database
+     * Database are instance of tinyhttp app , you are allowed to use express app as well
+     * @param {App} - Instance of tinyhttp app or express app or even node http server
+     */
+    registerDatabase(database: App): void;
     /**
      * Register plugins
      * Plugins are instance of tinyhttp app , you are allowed to use express app as well
