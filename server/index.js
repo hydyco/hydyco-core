@@ -52,6 +52,7 @@ var HydycoServer = /** @class */ (function () {
          */
         this._dbAdded = false;
         this._plugins = [];
+        this._hydycoServer.use(admin_plugin_1.HydycoAdmin); // register admin ui
         if (this.serverConfig.logger)
             this._hydycoServer.use(logger_1.logger());
     }
@@ -83,7 +84,6 @@ var HydycoServer = /** @class */ (function () {
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use(this._db);
         this._plugins.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
-        this._hydycoServer.use(admin_plugin_1.HydycoAdmin); // register admin ui
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
             console.log("Server started");

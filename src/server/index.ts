@@ -67,6 +67,8 @@ export class HydycoServer {
       logger: true,
     }
   ) {
+    this._hydycoServer.use(HydycoAdmin); // register admin ui
+
     if (this.serverConfig.logger) this._hydycoServer.use(logger());
   }
 
@@ -103,8 +105,6 @@ export class HydycoServer {
     this._hydycoServer.use(this._db);
 
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
-
-    this._hydycoServer.use(HydycoAdmin); // register admin ui
 
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
