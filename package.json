@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hydyco/admin-plugin": "git+https://github.com/iamrahultanwar/hydyco-admin-plugin.git",
     "@tinyhttp/app": "^1.3.11",
     "@tinyhttp/logger": "^1.3.0"
   },
