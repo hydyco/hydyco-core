@@ -2,8 +2,8 @@
  * Server for hydyco
  * Powered by tinyhttp https://tinyhttp.v1rtl.site/
  */
-import { App, NextFunction, Request, Response } from "@tinyhttp/app";
-import { logger } from "@tinyhttp/logger";
+import { Request, Response, NextFunction, Router, Application } from "express";
+import * as express from "express";
 import { HydycoAdmin } from "@hydyco/admin-plugin";
 export interface IServerConfig {
   port: number;
@@ -31,19 +31,7 @@ export class HydycoServer {
   /**
    * Init tinyhttp server
    */
-  private _hydycoServer: App = new App({
-    applyExtensions: (req: Request, res: Response, next: NextFunction) => {
-      bodyParser(req, res, next);
-    },
-    noMatchHandler: (req: Request, res: Response) =>
-      res.status(404).end("Not found :("),
-    onError: (err, req, res) => {
-      res.status(500).send({
-        status: false,
-        message: err.message,
-      });
-    },
-  });
+  private _hydycoServer: Application = express();
 
   /**
    * Check if server is running or not
@@ -67,9 +55,7 @@ export class HydycoServer {
       logger: true,
     }
   ) {
-    this._hydycoServer.use(HydycoAdmin); // register admin ui
-
-    if (this.serverConfig.logger) this._hydycoServer.use(logger());
+    this._hydycoServer.use(bodyParser); // parse body json
   }
 
   /**
@@ -77,7 +63,7 @@ export class HydycoServer {
    * Database are instance of tinyhttp app , you are allowed to use express app as well
    * @param {App} - Instance of tinyhttp app or express app or even node http server
    */
-  registerDatabase(database: App) {
+  registerDatabase(database: Router) {
     this._dbAdded = true;
     this._db = database;
   }
@@ -87,7 +73,7 @@ export class HydycoServer {
    * Plugins are instance of tinyhttp app , you are allowed to use express app as well
    * @param {App} - Instance of tinyhttp app or express app or even node http server
    */
-  registerPlugins(plugins: Array<App>) {
+  registerPlugins(plugins: Array<Router>) {
     if (this._isServerStarted)
       throw new Error(
         "Server is running, cannot register plugin after server is started"

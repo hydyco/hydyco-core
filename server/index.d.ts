@@ -2,7 +2,7 @@
  * Server for hydyco
  * Powered by tinyhttp https://tinyhttp.v1rtl.site/
  */
-import { App } from "@tinyhttp/app";
+import { Router } from "express";
 export interface IServerConfig {
     port: number;
     logger: boolean;
@@ -32,13 +32,13 @@ export declare class HydycoServer {
      * Database are instance of tinyhttp app , you are allowed to use express app as well
      * @param {App} - Instance of tinyhttp app or express app or even node http server
      */
-    registerDatabase(database: App): void;
+    registerDatabase(database: Router): void;
     /**
      * Register plugins
      * Plugins are instance of tinyhttp app , you are allowed to use express app as well
      * @param {App} - Instance of tinyhttp app or express app or even node http server
      */
-    registerPlugins(plugins: Array<App>): void;
+    registerPlugins(plugins: Array<Router>): void;
     /**
      * Start Hydyco Server
      */

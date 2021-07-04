@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Data parsing required by the project
  */

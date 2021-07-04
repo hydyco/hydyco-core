@@ -1,3 +1,4 @@
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoPath = exports.HydycoParser = exports.HydycoFile = exports.HydycoServer = void 0;
 var utils_1 = require("./utils");

@@ -1,12 +1,7 @@
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
-/**
- * Server for hydyco
- * Powered by tinyhttp https://tinyhttp.v1rtl.site/
- */
-var app_1 = require("@tinyhttp/app");
-var logger_1 = require("@tinyhttp/logger");
-var admin_plugin_1 = require("@hydyco/admin-plugin");
+var express = require("express");
 var bodyParser = function (request, response, next) {
     var body = "";
     request.on("data", function (chuck) {
@@ -28,20 +23,7 @@ var HydycoServer = /** @class */ (function () {
         /**
          * Init tinyhttp server
          */
-        this._hydycoServer = new app_1.App({
-            applyExtensions: function (req, res, next) {
-                bodyParser(req, res, next);
-            },
-            noMatchHandler: function (req, res) {
-                return res.status(404).end("Not found :(");
-            },
-            onError: function (err, req, res) {
-                res.status(500).send({
-                    status: false,
-                    message: err.message,
-                });
-            },
-        });
+        this._hydycoServer = express();
         /**
          * Check if server is running or not
          */
@@ -51,9 +33,7 @@ var HydycoServer = /** @class */ (function () {
          */
         this._dbAdded = false;
         this._plugins = [];
-        this._hydycoServer.use(admin_plugin_1.HydycoAdmin); // register admin ui
-        if (this.serverConfig.logger)
-            this._hydycoServer.use(logger_1.logger());
+        this._hydycoServer.use(bodyParser); // parse body json
     }
     /**
      * Register database
