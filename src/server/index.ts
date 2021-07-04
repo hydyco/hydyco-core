@@ -4,7 +4,7 @@
  */
 import { Request, Response, NextFunction, Router, Application } from "express";
 import * as express from "express";
-import { HydycoAdmin } from "@hydyco/admin-plugin";
+const { HydycoAdmin } = require("@hydyco/admin-plugin");
 export interface IServerConfig {
   port: number;
   logger: boolean;
@@ -91,6 +91,8 @@ export class HydycoServer {
     this._hydycoServer.use(this._db);
 
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
+
+    this._hydycoServer.use(HydycoAdmin);
 
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
