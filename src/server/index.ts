@@ -88,7 +88,7 @@ export class HydycoServer {
     if (!this._dbAdded)
       throw new Error("You need to register database before starting server");
 
-    this._hydycoServer.use(this._db);
+    this._hydycoServer.use("/admin", this._db);
 
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
 
