@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
 var express = require("express");
+var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
 var bodyParser = function (request, response, next) {
     var body = "";
     request.on("data", function (chuck) {
@@ -63,6 +64,7 @@ var HydycoServer = /** @class */ (function () {
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use(this._db);
         this._plugins.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
+        this._hydycoServer.use(HydycoAdmin);
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
             console.log("Server started");
