@@ -34,6 +34,7 @@ var HydycoServer = /** @class */ (function () {
          */
         this._dbAdded = false;
         this._plugins = [];
+        this._routes = [];
         this._hydycoServer.use(bodyParser); // parse body json
     }
     /**
@@ -56,6 +57,15 @@ var HydycoServer = /** @class */ (function () {
         this._plugins = plugins;
     };
     /**
+     * Register routes
+     * @param {HydycoModel} - Type of HydycoModel
+     */
+    HydycoServer.prototype.registerRoutes = function (routes) {
+        if (this._isServerStarted)
+            throw new Error("Server is running, cannot register routes after server is started");
+        this._routes = routes;
+    };
+    /**
      * Start Hydyco Server
      */
     HydycoServer.prototype.start = function () {
@@ -64,10 +74,11 @@ var HydycoServer = /** @class */ (function () {
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use("/admin", this._db);
         this._plugins.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
+        this._routes.forEach(function (route) { return _this._hydycoServer.use(route.Routes); });
         this._hydycoServer.use(HydycoAdmin);
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
-            console.log("Server started");
+            console.log("Server started at http://localhost:" + _this.serverConfig.port);
         });
     };
     return HydycoServer;

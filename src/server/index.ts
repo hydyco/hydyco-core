@@ -49,6 +49,8 @@ export class HydycoServer {
   private _db: any;
   private _plugins: Array<any> = [];
 
+  private _routes: Array<any> = [];
+
   constructor(
     private serverConfig: IServerConfig = {
       port: 3000,
@@ -82,6 +84,18 @@ export class HydycoServer {
   }
 
   /**
+   * Register routes
+   * @param {HydycoModel} - Type of HydycoModel
+   */
+  registerRoutes(routes: Array<any>): void {
+    if (this._isServerStarted)
+      throw new Error(
+        "Server is running, cannot register routes after server is started"
+      );
+    this._routes = routes;
+  }
+
+  /**
    * Start Hydyco Server
    */
   start() {
@@ -92,11 +106,15 @@ export class HydycoServer {
 
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
 
+    this._routes.forEach((route) => this._hydycoServer.use(route.Routes));
+
     this._hydycoServer.use(HydycoAdmin);
 
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
-      console.log("Server started");
+      console.log(
+        "Server started at http://localhost:" + this.serverConfig.port
+      );
     });
   }
 }

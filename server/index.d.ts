@@ -26,6 +26,7 @@ export declare class HydycoServer {
      */
     private _db;
     private _plugins;
+    private _routes;
     constructor(serverConfig?: IServerConfig);
     /**
      * Register database
@@ -39,6 +40,11 @@ export declare class HydycoServer {
      * @param {App} - Instance of tinyhttp app or express app or even node http server
      */
     registerPlugins(plugins: Array<Router>): void;
+    /**
+     * Register routes
+     * @param {HydycoModel} - Type of HydycoModel
+     */
+    registerRoutes(routes: Array<any>): void;
     /**
      * Start Hydyco Server
      */
