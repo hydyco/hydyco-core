@@ -106,7 +106,7 @@ export class HydycoServer {
 
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
 
-    this._routes.forEach((route) => this._hydycoServer.use(route.Routes));
+    this._routes.forEach((route) => this._hydycoServer.use(route));
 
     this._hydycoServer.use(HydycoAdmin);
 
