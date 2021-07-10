@@ -1,6 +1,5 @@
 /**
  * Server for hydyco
- * Powered by tinyhttp https://tinyhttp.v1rtl.site/
  */
 import { Router } from "express";
 export interface IServerConfig {

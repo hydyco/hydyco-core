@@ -1,6 +1,5 @@
 /**
  * Server for hydyco
- * Powered by tinyhttp https://tinyhttp.v1rtl.site/
  */
 import { Request, Response, NextFunction, Router, Application } from "express";
 import * as express from "express";
@@ -9,23 +8,6 @@ export interface IServerConfig {
   port: number;
   logger: boolean;
 }
-
-const bodyParser = (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  let body = "";
-  request.on("data", (chuck) => {
-    body += chuck;
-  });
-
-  request.on("end", () => {
-    body = body.length > 0 ? JSON.parse(body) : undefined;
-    request.body = body;
-    next();
-  });
-};
 
 export class HydycoServer {
   /**
@@ -57,7 +39,7 @@ export class HydycoServer {
       logger: true,
     }
   ) {
-    this._hydycoServer.use(bodyParser); // parse body json
+    this._hydycoServer.use(express.json()); // parse body json
   }
 
   /**

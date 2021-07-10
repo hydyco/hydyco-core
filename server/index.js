@@ -3,17 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
 var express = require("express");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
-var bodyParser = function (request, response, next) {
-    var body = "";
-    request.on("data", function (chuck) {
-        body += chuck;
-    });
-    request.on("end", function () {
-        body = body.length > 0 ? JSON.parse(body) : undefined;
-        request.body = body;
-        next();
-    });
-};
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
         if (serverConfig === void 0) { serverConfig = {
@@ -35,7 +24,7 @@ var HydycoServer = /** @class */ (function () {
         this._dbAdded = false;
         this._plugins = [];
         this._routes = [];
-        this._hydycoServer.use(bodyParser); // parse body json
+        this._hydycoServer.use(express.json()); // parse body json
     }
     /**
      * Register database
