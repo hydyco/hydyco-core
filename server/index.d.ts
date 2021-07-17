@@ -24,21 +24,21 @@ export declare class HydycoServer {
      * configuration
      */
     private _db;
-    private _plugins;
+    private _middleware;
     private _routes;
     constructor(serverConfig?: IServerConfig);
     /**
      * Register database
-     * Database are instance of tinyhttp app , you are allowed to use express app as well
-     * @param {App} - Instance of tinyhttp app or express app or even node http server
+     * Database are instance of express app
+     * @param {App} - Instance of express app or express app or even node http server
      */
     registerDatabase(database: Router): void;
     /**
-     * Register plugins
-     * Plugins are instance of tinyhttp app , you are allowed to use express app as well
-     * @param {App} - Instance of tinyhttp app or express app or even node http server
+     * Register middleware
+     * middleware are instance of express app
+     * @param {App} - Instance of express app or express app or even node http server
      */
-    registerPlugins(plugins: Array<Router>): void;
+    registerMiddleware(middleware: Array<Router>): void;
     /**
      * Register routes
      * @param {HydycoModel} - Type of HydycoModel

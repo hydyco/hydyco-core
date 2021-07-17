@@ -29,7 +29,7 @@ export class HydycoServer {
    * configuration
    */
   private _db: any;
-  private _plugins: Array<any> = [];
+  private _middleware: Array<any> = [];
 
   private _routes: Array<any> = [];
 
@@ -44,8 +44,8 @@ export class HydycoServer {
 
   /**
    * Register database
-   * Database are instance of tinyhttp app , you are allowed to use express app as well
-   * @param {App} - Instance of tinyhttp app or express app or even node http server
+   * Database are instance of express app
+   * @param {App} - Instance of express app or express app or even node http server
    */
   registerDatabase(database: Router) {
     this._dbAdded = true;
@@ -53,16 +53,16 @@ export class HydycoServer {
   }
 
   /**
-   * Register plugins
-   * Plugins are instance of tinyhttp app , you are allowed to use express app as well
-   * @param {App} - Instance of tinyhttp app or express app or even node http server
+   * Register middleware
+   * middleware are instance of express app
+   * @param {App} - Instance of express app or express app or even node http server
    */
-  registerPlugins(plugins: Array<Router>) {
+  registerMiddleware(middleware: Array<Router>) {
     if (this._isServerStarted)
       throw new Error(
         "Server is running, cannot register plugin after server is started"
       );
-    this._plugins = plugins;
+    this._middleware = middleware;
   }
 
   /**
@@ -88,7 +88,7 @@ export class HydycoServer {
 
     this._hydycoServer.use(HydycoAdmin);
 
-    this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
+    this._middleware.forEach((plugin) => this._hydycoServer.use(plugin));
 
     this._routes.forEach((route) => this._hydycoServer.use(route));
 
