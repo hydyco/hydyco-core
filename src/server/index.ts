@@ -3,6 +3,7 @@
  */
 import { Request, Response, NextFunction, Router, Application } from "express";
 import * as express from "express";
+import * as morgan from "morgan";
 const { HydycoAdmin } = require("@hydyco/admin-plugin");
 export interface IServerConfig {
   port: number;
@@ -40,6 +41,9 @@ export class HydycoServer {
     }
   ) {
     this._hydycoServer.use(express.json()); // parse body json
+    if (this.serverConfig.logger) {
+      this._hydycoServer.use(morgan("combined"));
+    }
   }
 
   /**

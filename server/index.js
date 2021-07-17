@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
 var express = require("express");
+var morgan = require("morgan");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
@@ -25,6 +26,9 @@ var HydycoServer = /** @class */ (function () {
         this._middleware = [];
         this._routes = [];
         this._hydycoServer.use(express.json()); // parse body json
+        if (this.serverConfig.logger) {
+            this._hydycoServer.use(morgan("combined"));
+        }
     }
     /**
      * Register database

@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@hydyco/admin-plugin": "git+https://github.com/iamrahultanwar/hydyco-admin-plugin.git",
-    "express": "^4.17.1"
+    "@types/morgan": "^1.9.3",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
