@@ -9,7 +9,7 @@ export interface IServerConfig {
 export declare class HydycoServer {
     private serverConfig;
     /**
-     * Init tinyhttp server
+     * Init express server
      */
     private _hydycoServer;
     /**

@@ -11,7 +11,7 @@ var HydycoServer = /** @class */ (function () {
         }; }
         this.serverConfig = serverConfig;
         /**
-         * Init tinyhttp server
+         * Init express server
          */
         this._hydycoServer = express();
         /**
@@ -62,9 +62,9 @@ var HydycoServer = /** @class */ (function () {
         if (!this._dbAdded)
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use("/admin", this._db);
+        this._hydycoServer.use(HydycoAdmin);
         this._plugins.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
         this._routes.forEach(function (route) { return _this._hydycoServer.use(route); });
-        this._hydycoServer.use(HydycoAdmin);
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
             console.log("Server started at http://localhost:" + _this.serverConfig.port);

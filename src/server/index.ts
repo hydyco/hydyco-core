@@ -11,7 +11,7 @@ export interface IServerConfig {
 
 export class HydycoServer {
   /**
-   * Init tinyhttp server
+   * Init express server
    */
   private _hydycoServer: Application = express();
 
@@ -86,11 +86,11 @@ export class HydycoServer {
 
     this._hydycoServer.use("/admin", this._db);
 
+    this._hydycoServer.use(HydycoAdmin);
+
     this._plugins.forEach((plugin) => this._hydycoServer.use(plugin));
 
     this._routes.forEach((route) => this._hydycoServer.use(route));
-
-    this._hydycoServer.use(HydycoAdmin);
 
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
