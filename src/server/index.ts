@@ -90,7 +90,7 @@ export class HydycoServer {
 
     this._hydycoServer.use("/admin", this._db);
 
-    this._hydycoServer.use(HydycoAdmin);
+    this._hydycoServer.use("/admin-ui", HydycoAdmin);
 
     this._middleware.forEach((plugin) => this._hydycoServer.use(plugin));
 
