@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
 var express = require("express");
 var morgan = require("morgan");
+var boxen = require("boxen");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
@@ -71,7 +72,15 @@ var HydycoServer = /** @class */ (function () {
         this._routes.forEach(function (route) { return _this._hydycoServer.use(route); });
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
-            console.log("Server started at http://localhost:" + _this.serverConfig.port);
+            console.log(boxen("Server started at http://localhost:" + _this.serverConfig.port, {
+                padding: 1,
+                margin: 1,
+                borderStyle: "double",
+                borderColor: "yellow",
+            }));
+            console.log(boxen("Admin ui at http://localhost:" +
+                _this.serverConfig.port +
+                "/admin-ui", { padding: 1, margin: 1, borderStyle: "double", borderColor: "green" }));
         });
     };
     return HydycoServer;

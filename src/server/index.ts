@@ -4,7 +4,10 @@
 import { Request, Response, NextFunction, Router, Application } from "express";
 import * as express from "express";
 import * as morgan from "morgan";
+import * as boxen from "boxen";
+
 const { HydycoAdmin } = require("@hydyco/admin-plugin");
+
 export interface IServerConfig {
   port: number;
   logger: boolean;
@@ -99,7 +102,20 @@ export class HydycoServer {
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
       console.log(
-        "Server started at http://localhost:" + this.serverConfig.port
+        boxen("Server started at http://localhost:" + this.serverConfig.port, {
+          padding: 1,
+          margin: 1,
+          borderStyle: "double",
+          borderColor: "yellow",
+        })
+      );
+      console.log(
+        boxen(
+          "Admin ui at http://localhost:" +
+            this.serverConfig.port +
+            "/admin-ui",
+          { padding: 1, margin: 1, borderStyle: "double", borderColor: "green" }
+        )
       );
     });
   }
