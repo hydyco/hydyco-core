@@ -66,7 +66,7 @@ var HydycoServer = /** @class */ (function () {
         if (!this._dbAdded)
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use("/admin", this._db);
-        this._hydycoServer.use("/admin-ui", HydycoAdmin);
+        this._hydycoServer.use(HydycoAdmin);
         this._middleware.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
         this._routes.forEach(function (route) { return _this._hydycoServer.use(route); });
         this._hydycoServer.listen(this.serverConfig.port, function () {
