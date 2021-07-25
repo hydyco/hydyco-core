@@ -25,6 +25,7 @@ var HydycoServer = /** @class */ (function () {
          */
         this._dbAdded = false;
         this._middleware = [];
+        this._plugins = [];
         this._routes = [];
         this._hydycoServer.use(express.json()); // parse body json
         if (this.serverConfig.logger) {
@@ -41,13 +42,23 @@ var HydycoServer = /** @class */ (function () {
         this._db = database;
     };
     /**
+     * Register plugins
+     * plugins are instance of express app
+     * @param {App} - Instance of express app or express app or even node http server
+     */
+    HydycoServer.prototype.registerPlugins = function (plugins) {
+        if (this._isServerStarted)
+            throw new Error("Server is running, cannot register plugin after server is started");
+        this._plugins = plugins;
+    };
+    /**
      * Register middleware
      * middleware are instance of express app
      * @param {App} - Instance of express app or express app or even node http server
      */
     HydycoServer.prototype.registerMiddleware = function (middleware) {
         if (this._isServerStarted)
-            throw new Error("Server is running, cannot register plugin after server is started");
+            throw new Error("Server is running, cannot register middleware after server is started");
         this._middleware = middleware;
     };
     /**
@@ -68,7 +79,10 @@ var HydycoServer = /** @class */ (function () {
             throw new Error("You need to register database before starting server");
         this._hydycoServer.use("/admin", this._db);
         this._hydycoServer.use(HydycoAdmin);
-        this._middleware.forEach(function (plugin) { return _this._hydycoServer.use(plugin); });
+        this._plugins.forEach(function (plugin) { return _this._hydycoServer.use("/admin", plugin); });
+        this._middleware.forEach(function (middleware) {
+            return _this._hydycoServer.use(middleware);
+        });
         this._routes.forEach(function (route) { return _this._hydycoServer.use(route); });
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;

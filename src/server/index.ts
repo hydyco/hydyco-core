@@ -34,6 +34,7 @@ export class HydycoServer {
    */
   private _db: any;
   private _middleware: Array<any> = [];
+  private _plugins: Array<any> = [];
 
   private _routes: Array<any> = [];
 
@@ -60,6 +61,19 @@ export class HydycoServer {
   }
 
   /**
+   * Register plugins
+   * plugins are instance of express app
+   * @param {App} - Instance of express app or express app or even node http server
+   */
+  registerPlugins(plugins: Array<Router>) {
+    if (this._isServerStarted)
+      throw new Error(
+        "Server is running, cannot register plugin after server is started"
+      );
+    this._plugins = plugins;
+  }
+
+  /**
    * Register middleware
    * middleware are instance of express app
    * @param {App} - Instance of express app or express app or even node http server
@@ -67,7 +81,7 @@ export class HydycoServer {
   registerMiddleware(middleware: Array<Router>) {
     if (this._isServerStarted)
       throw new Error(
-        "Server is running, cannot register plugin after server is started"
+        "Server is running, cannot register middleware after server is started"
       );
     this._middleware = middleware;
   }
@@ -95,7 +109,11 @@ export class HydycoServer {
 
     this._hydycoServer.use(HydycoAdmin);
 
-    this._middleware.forEach((plugin) => this._hydycoServer.use(plugin));
+    this._plugins.forEach((plugin) => this._hydycoServer.use("/admin", plugin));
+
+    this._middleware.forEach((middleware) =>
+      this._hydycoServer.use(middleware)
+    );
 
     this._routes.forEach((route) => this._hydycoServer.use(route));
 

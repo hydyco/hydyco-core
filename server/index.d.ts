@@ -25,6 +25,7 @@ export declare class HydycoServer {
      */
     private _db;
     private _middleware;
+    private _plugins;
     private _routes;
     constructor(serverConfig?: IServerConfig);
     /**
@@ -33,6 +34,12 @@ export declare class HydycoServer {
      * @param {App} - Instance of express app or express app or even node http server
      */
     registerDatabase(database: Router): void;
+    /**
+     * Register plugins
+     * plugins are instance of express app
+     * @param {App} - Instance of express app or express app or even node http server
+     */
+    registerPlugins(plugins: Array<Router>): void;
     /**
      * Register middleware
      * middleware are instance of express app
