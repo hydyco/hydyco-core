@@ -4,6 +4,7 @@ exports.HydycoServer = void 0;
 var express = require("express");
 var morgan = require("morgan");
 var boxen = require("boxen");
+var actuator = require("express-actuator");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
@@ -84,6 +85,14 @@ var HydycoServer = /** @class */ (function () {
             return _this._hydycoServer.use(middleware);
         });
         this._routes.forEach(function (route) { return _this._hydycoServer.use(route); });
+        var options = {
+            basePath: "/",
+            infoGitMode: "full",
+            infoBuildOptions: null,
+            infoDateFormat: null,
+            customEndpoints: [], // array of custom endpoints
+        };
+        this._hydycoServer.use(actuator(options));
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
             console.log(boxen("Server started at http://localhost:" + _this.serverConfig.port, {
