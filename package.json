@@ -1,7 +1,7 @@
 {
   "name": "@hydyco/core",
   "version": "0.0.1",
-  "description": "",
+  "description": "Hydyco helps you to build APIs very fast 💨",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
@@ -15,10 +15,12 @@
     "@types/morgan": "^1.9.3",
     "boxen": "^5.0.1",
     "express": "^4.17.1",
+    "express-actuator": "^1.7.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
+    "@types/express-actuator": "^1.6.2",
     "@types/node": "^15.12.5",
     "tsc-watch": "^4.4.0",
     "typescript": "^4.3.4"
