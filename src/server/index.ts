@@ -5,10 +5,10 @@ import { Request, Response, NextFunction, Router, Application } from "express";
 import * as express from "express";
 import * as morgan from "morgan";
 import * as boxen from "boxen";
-import * as actuator from "express-actuator";
 
 const { HydycoAdmin } = require("@hydyco/admin-plugin");
 
+import welcomePage from "./extra/welcome";
 export interface IServerConfig {
   port: number;
   logger: boolean;
@@ -118,15 +118,7 @@ export class HydycoServer {
 
     this._routes.forEach((route) => this._hydycoServer.use(route));
 
-    const options: any = {
-      basePath: "/", // It will set /management/info instead of /info
-      infoGitMode: "full", // the amount of git information you want to expose, 'simple' or 'full',
-      infoBuildOptions: null, // extra information you want to expose in the build object. Requires an object.
-      infoDateFormat: null, // by default, git.commit.time will show as is defined in git.properties. If infoDateFormat is defined, moment will format git.commit.time. See https://momentjs.com/docs/#/displaying/format/.
-      customEndpoints: [], // array of custom endpoints
-    };
-
-    this._hydycoServer.use(actuator(options));
+    this._hydycoServer.use(welcomePage);
 
     this._hydycoServer.listen(this.serverConfig.port, () => {
       this._isServerStarted = true;
