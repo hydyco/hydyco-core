@@ -1,17 +1,22 @@
 /**
  * Server for hydyco
  */
-import { Request, Response, NextFunction, Router, Application } from "express";
+import { Router, Application } from "express";
 import * as express from "express";
 import * as morgan from "morgan";
 import * as boxen from "boxen";
-
+import docsPlugin from "@hydyco/docs-plugin";
+import filePlugin from "@hydyco/file-plugin";
+import { useAuth } from "@hydyco/auth";
 const { HydycoAdmin } = require("@hydyco/admin-plugin");
 
 import welcomePage from "./extra/welcome";
 export interface IServerConfig {
   port: number;
   logger: boolean;
+  auth: {
+    secretOrKey: string;
+  };
 }
 
 export class HydycoServer {
@@ -35,7 +40,7 @@ export class HydycoServer {
    */
   private _db: any;
   private _middleware: Array<any> = [];
-  private _plugins: Array<any> = [];
+  private _plugins: Array<any> = [filePlugin(), docsPlugin()];
 
   private _routes: Array<any> = [];
 
@@ -43,12 +48,18 @@ export class HydycoServer {
     private serverConfig: IServerConfig = {
       port: 3000,
       logger: true,
+      auth: {
+        secretOrKey: "yourKey",
+      },
     }
   ) {
     this._hydycoServer.use(express.json()); // parse body json
     if (this.serverConfig.logger) {
       this._hydycoServer.use(morgan("combined"));
     }
+    this._middleware.push(
+      useAuth({ secretOrKey: this.serverConfig.auth.secretOrKey })
+    );
   }
 
   /**

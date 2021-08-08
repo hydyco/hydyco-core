@@ -5,6 +5,9 @@ import { Router } from "express";
 export interface IServerConfig {
     port: number;
     logger: boolean;
+    auth: {
+        secretOrKey: string;
+    };
 }
 export declare class HydycoServer {
     private serverConfig;

@@ -4,6 +4,9 @@ exports.HydycoServer = void 0;
 var express = require("express");
 var morgan = require("morgan");
 var boxen = require("boxen");
+var docs_plugin_1 = require("@hydyco/docs-plugin");
+var file_plugin_1 = require("@hydyco/file-plugin");
+var auth_1 = require("@hydyco/auth");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
 var welcome_1 = require("./extra/welcome");
 var HydycoServer = /** @class */ (function () {
@@ -11,6 +14,9 @@ var HydycoServer = /** @class */ (function () {
         if (serverConfig === void 0) { serverConfig = {
             port: 3000,
             logger: true,
+            auth: {
+                secretOrKey: "yourKey",
+            },
         }; }
         this.serverConfig = serverConfig;
         /**
@@ -26,12 +32,13 @@ var HydycoServer = /** @class */ (function () {
          */
         this._dbAdded = false;
         this._middleware = [];
-        this._plugins = [];
+        this._plugins = [file_plugin_1.default(), docs_plugin_1.default()];
         this._routes = [];
         this._hydycoServer.use(express.json()); // parse body json
         if (this.serverConfig.logger) {
             this._hydycoServer.use(morgan("combined"));
         }
+        this._middleware.push(auth_1.useAuth({ secretOrKey: this.serverConfig.auth.secretOrKey }));
     }
     /**
      * Register database

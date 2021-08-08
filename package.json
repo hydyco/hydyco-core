@@ -12,6 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@hydyco/admin-plugin": "git+ssh://git@github.com/iamrahultanwar/hydyco-admin-plugin.git",
+    "@hydyco/docs-plugin": "github:iamrahultanwar/hydyco-doc-plugin",
+    "@hydyco/file-plugin": "github:iamrahultanwar/hydyco-file-plugin",
+    "@hydyco/auth": "github:iamrahultanwar/hydyco-auth",
     "boxen": "^5.0.1",
     "express": "^4.17.1",
     "morgan": "^1.10.0"
