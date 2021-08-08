@@ -4,16 +4,20 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
-var express = require("express");
-var morgan = require("morgan");
-var boxen = require("boxen");
-var docs_plugin_1 = require("@hydyco/docs-plugin");
-var file_plugin_1 = require("@hydyco/file-plugin");
+var express_1 = __importDefault(require("express"));
+var morgan_1 = __importDefault(require("morgan"));
+var boxen_1 = __importDefault(require("boxen"));
+var cors_1 = __importDefault(require("cors"));
+var docs_plugin_1 = __importDefault(require("@hydyco/docs-plugin"));
+var file_plugin_1 = __importDefault(require("@hydyco/file-plugin"));
 var auth_1 = require("@hydyco/auth");
 var HydycoAdmin = require("@hydyco/admin-plugin").HydycoAdmin;
-var welcome_1 = require("./extra/welcome");
+var welcome_1 = __importDefault(require("./extra/welcome"));
 var HydycoServer = /** @class */ (function () {
     function HydycoServer(serverConfig) {
         if (serverConfig === void 0) { serverConfig = {
@@ -22,12 +26,13 @@ var HydycoServer = /** @class */ (function () {
             auth: {
                 secretOrKey: "yourKey",
             },
+            cors: {},
         }; }
         this.serverConfig = serverConfig;
         /**
          * Init express server
          */
-        this._hydycoServer = express();
+        this._hydycoServer = express_1.default();
         /**
          * Check if server is running or not
          */
@@ -39,10 +44,11 @@ var HydycoServer = /** @class */ (function () {
         this._middleware = [];
         this._plugins = [file_plugin_1.default(), docs_plugin_1.default()];
         this._routes = [];
-        this._hydycoServer.use(express.json()); // parse body json
+        this._hydycoServer.use(express_1.default.json()); // parse body json
         if (this.serverConfig.logger) {
-            this._hydycoServer.use(morgan("combined"));
+            this._hydycoServer.use(morgan_1.default("combined"));
         }
+        this._middleware.push(cors_1.default(this.serverConfig.cors));
         this._middleware.push(auth_1.useAuth({ secretOrKey: this.serverConfig.auth.secretOrKey }));
     }
     /**
@@ -100,13 +106,13 @@ var HydycoServer = /** @class */ (function () {
         this._hydycoServer.use(welcome_1.default);
         this._hydycoServer.listen(this.serverConfig.port, function () {
             _this._isServerStarted = true;
-            console.log(boxen("Server started at http://localhost:" + _this.serverConfig.port, {
+            console.log(boxen_1.default("Server started at http://localhost:" + _this.serverConfig.port, {
                 padding: 1,
                 margin: 1,
                 borderStyle: "double",
                 borderColor: "yellow",
             }));
-            console.log(boxen("Admin ui at http://localhost:" +
+            console.log(boxen_1.default("Admin ui at http://localhost:" +
                 _this.serverConfig.port +
                 "/admin-ui", { padding: 1, margin: 1, borderStyle: "double", borderColor: "green" }));
         });

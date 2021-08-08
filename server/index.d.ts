@@ -8,6 +8,7 @@ export interface IServerConfig {
     auth: {
         secretOrKey: string;
     };
+    cors?: {};
 }
 export declare class HydycoServer {
     private serverConfig;

@@ -2,9 +2,10 @@
  * Server for hydyco
  */
 import { Router, Application } from "express";
-import * as express from "express";
-import * as morgan from "morgan";
-import * as boxen from "boxen";
+import express from "express";
+import morgan from "morgan";
+import boxen from "boxen";
+import cors from "cors";
 import docsPlugin from "@hydyco/docs-plugin";
 import filePlugin from "@hydyco/file-plugin";
 import { useAuth } from "@hydyco/auth";
@@ -17,6 +18,7 @@ export interface IServerConfig {
   auth: {
     secretOrKey: string;
   };
+  cors?: {};
 }
 
 export class HydycoServer {
@@ -51,12 +53,14 @@ export class HydycoServer {
       auth: {
         secretOrKey: "yourKey",
       },
+      cors: {},
     }
   ) {
     this._hydycoServer.use(express.json()); // parse body json
     if (this.serverConfig.logger) {
       this._hydycoServer.use(morgan("combined"));
     }
+    this._middleware.push(cors(this.serverConfig.cors));
     this._middleware.push(
       useAuth({ secretOrKey: this.serverConfig.auth.secretOrKey })
     );
