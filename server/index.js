@@ -1,4 +1,9 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HydycoServer = void 0;
 var express = require("express");
@@ -57,7 +62,7 @@ var HydycoServer = /** @class */ (function () {
     HydycoServer.prototype.registerPlugins = function (plugins) {
         if (this._isServerStarted)
             throw new Error("Server is running, cannot register plugin after server is started");
-        this._plugins = plugins;
+        this._plugins = __spreadArray(__spreadArray([], this._plugins), plugins);
     };
     /**
      * Register middleware
@@ -67,7 +72,7 @@ var HydycoServer = /** @class */ (function () {
     HydycoServer.prototype.registerMiddleware = function (middleware) {
         if (this._isServerStarted)
             throw new Error("Server is running, cannot register middleware after server is started");
-        this._middleware = middleware;
+        this._middleware = __spreadArray(__spreadArray([], this._middleware), middleware);
     };
     /**
      * Register routes

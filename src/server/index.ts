@@ -82,7 +82,7 @@ export class HydycoServer {
       throw new Error(
         "Server is running, cannot register plugin after server is started"
       );
-    this._plugins = plugins;
+    this._plugins = [...this._plugins, ...plugins];
   }
 
   /**
@@ -95,7 +95,7 @@ export class HydycoServer {
       throw new Error(
         "Server is running, cannot register middleware after server is started"
       );
-    this._middleware = middleware;
+    this._middleware = [...this._middleware, ...middleware];
   }
 
   /**
