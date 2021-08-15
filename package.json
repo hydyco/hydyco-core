@@ -8,8 +8,6 @@
     "start": "tsc-watch --onSuccess \"node ./index.js\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@hydyco/admin-plugin": "^0.0.1",
     "@hydyco/auth": "^0.0.1",
@@ -28,5 +26,10 @@
     "@types/node": "^15.12.5",
     "tsc-watch": "^4.4.0",
     "typescript": "^4.3.4"
+  },
+  "author": "Rahul Tanwar <mr.rahultanwar@gmail.com>",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
   }
 }
