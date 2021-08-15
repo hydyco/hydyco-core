@@ -1,6 +1,6 @@
 {
   "name": "@hydyco/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Hydyco helps you to build APIs very fast 💨",
   "main": "index.js",
   "scripts": {
