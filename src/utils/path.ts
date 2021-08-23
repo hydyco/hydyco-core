@@ -2,8 +2,9 @@
  * Path util provides all the paths related to json files.
  * Which includes reading writing updating
  */
-import * as fs from "fs";
-import * as path from "path";
+import fs from "fs";
+import path from "path";
+import { camelCase } from "camel-case";
 
 export default class PathUtils {
   private _rootPath: string;
@@ -17,11 +18,7 @@ export default class PathUtils {
    * If not found creates new path
    */
   checkHydyco() {
-    const checkDirs: Array<string> = [
-      this.hydycoDir,
-      this.hydycoMappingDir,
-      this.hydycoModelsDir,
-    ];
+    const checkDirs: Array<string> = [this.hydycoDir, this.hydycoMappingDir];
 
     checkDirs.forEach((dir) => {
       if (!fs.existsSync(dir)) {
@@ -83,7 +80,7 @@ export default class PathUtils {
    */
 
   public getFileName(fileName: string): string {
-    return fileName.split(".")[0].toLowerCase();
+    return camelCase(fileName.split(".")[0]);
   }
 
   /**
@@ -95,4 +92,9 @@ export default class PathUtils {
     fileName = this.getFileName(fileName);
     return path.join(this.hydycoMappingDir, `${fileName}.json`);
   }
+
+  /**
+   * Get file from dir
+   *
+   */
 }

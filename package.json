@@ -14,9 +14,11 @@
     "@hydyco/docs-plugin": "^0.0.7",
     "@hydyco/file-plugin": "^0.0.7",
     "boxen": "^5.0.1",
+    "camel-case": "^4.1.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pascal-case": "^3.1.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

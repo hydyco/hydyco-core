@@ -1,6 +1,7 @@
 /**
  * Data parsing required by the project
  */
+import { pascalCase } from "pascal-case";
 
 export default class ParserUtils {
   /**
@@ -8,7 +9,6 @@ export default class ParserUtils {
    * @return {string}
    */
   getModelName(str: string) {
-    str = str.toLowerCase();
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return pascalCase(str);
   }
 }

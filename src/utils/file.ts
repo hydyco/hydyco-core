@@ -62,4 +62,15 @@ export default class FileUtils extends PathUtils {
       return data;
     });
   }
+
+  /**
+   * Create file if not exists, if does skip it
+   * @param {string} fileName - name of the file
+   * @param {object} fileData - data fo the json file
+   */
+  createSkipFile(fileName: string, fileData: Object) {
+    fileName = this.getFileName(fileName);
+    if (!fs.existsSync(this.getMappingFilePath(fileName)))
+      this.writeMappingFile(fileName, fileData);
+  }
 }

@@ -10,8 +10,8 @@ import docsPlugin from "@hydyco/docs-plugin";
 import filePlugin from "@hydyco/file-plugin";
 import { useAuth } from "@hydyco/auth";
 const { HydycoAdmin } = require("@hydyco/admin-plugin");
-
 import welcomePage from "./extra/welcome";
+
 export interface IServerConfig {
   port: number;
   logger: boolean;
@@ -58,7 +58,7 @@ export class HydycoServer {
   ) {
     this._hydycoServer.use(express.json()); // parse body json
     if (this.serverConfig.logger) {
-      this._hydycoServer.use(morgan("combined"));
+      this._hydycoServer.use(morgan("dev"));
     }
     this._middleware.push(cors(this.serverConfig.cors));
     this._middleware.push(
