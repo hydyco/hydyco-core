@@ -59,14 +59,14 @@ router.get("/", (req, res) => {
           opacity: 0;
           font-size: 150px;
           font-weight: bold;
-          animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 0.7s forwards;
+          animation: slideUp 0.5s cubic-bezier(0.19, 1, 0.3, 1) 0.7s forwards;
         }
   
         .title {
           height: 36px;
           background-size: 100%;
           opacity: 0;
-          animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 0.2s forwards;
+          animation: slideUp 0.5s cubic-bezier(0.19, 1, 0.3, 1) 0.2s forwards;
         }
   
         .subtitle {
@@ -76,7 +76,7 @@ router.get("/", (req, res) => {
           text-align: center;
           letter-spacing: 0.5;
           opacity: 0;
-          animation: slideUp 1s cubic-bezier(0.19, 1, 0.3, 1) 0.5s forwards;
+          animation: slideUp 0.5s cubic-bezier(0.19, 1, 0.3, 1) 0.5s forwards;
         }
   
         a {
@@ -101,6 +101,56 @@ router.get("/", (req, res) => {
             transform: none;
           }
         }
+  
+        .button-black-3d {
+          min-width: 130px;
+          height: 40px;
+          color: #fff;
+          padding: 5px 10px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          display: inline-block;
+          outline: none;
+          border-radius: 5px;
+          border: none;
+          background: #343a40;
+          box-shadow: 0 5px #212529;
+        }
+        .button-black-3d:hover {
+          box-shadow: 0 3px #212529;
+          top: 1px;
+        }
+        .button-black-3d:active {
+          box-shadow: 0 0 #212529;
+          top: 5px;
+        }
+  
+        .button-blue-3d {
+          min-width: 130px;
+          height: 40px;
+          color: #fff;
+          padding: 5px 10px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          position: relative;
+          display: inline-block;
+          outline: none;
+          border-radius: 5px;
+          border: none;
+          background: #3a86ff;
+          box-shadow: 0 5px #4433ff;
+        }
+        .button-blue-3d:hover {
+          box-shadow: 0 3px #4433ff;
+          top: 1px;
+        }
+        .button-blue-3d:active {
+          box-shadow: 0 0 #4433ff;
+          top: 5px;
+        }
       </style>
     </head>
     <body>
@@ -108,10 +158,21 @@ router.get("/", (req, res) => {
         <div class="logo">HYDYCO</div>
         <div class="title">Hydyco helps you to build your APIs fast 💨</div>
         <div class="subtitle">
-          <p>
-            Don't know where to start? Read the
-            <a href="https://hydyco.com/docs" target="_blank">documentation</a>.
-          </p>
+          <p>Don't know where to start?</p>
+          <button
+            class="button-black-3d"
+            href="https://hydyco.com/docs"
+            onclick="window.location.replace('https://hydyco.com/docs')"
+          >
+            Documentation
+          </button>
+  
+          <button
+            class="button-blue-3d"
+            onclick="window.location.replace('/admin-ui')"
+          >
+            Admin
+          </button>
         </div>
       </section>
     </body>
