@@ -1,6 +1,6 @@
 {
   "name": "@hydyco/core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Hydyco helps you to build APIs very fast 💨",
   "main": "index.js",
   "scripts": {
@@ -9,10 +9,10 @@
   },
   "keywords": [],
   "dependencies": {
-    "@hydyco/admin-plugin": "^0.0.8",
-    "@hydyco/auth": "^0.0.8",
-    "@hydyco/docs-plugin": "^0.0.8",
-    "@hydyco/file-plugin": "^0.0.8",
+    "@hydyco/admin-plugin": "^0.0.9",
+    "@hydyco/auth": "^0.0.9",
+    "@hydyco/docs-plugin": "^0.0.9",
+    "@hydyco/file-plugin": "^0.0.9",
     "boxen": "^5.0.1",
     "camel-case": "^4.1.2",
     "cors": "^2.8.5",
