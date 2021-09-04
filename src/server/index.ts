@@ -6,11 +6,10 @@ import express from "express";
 import morgan from "morgan";
 import boxen from "boxen";
 import cors from "cors";
-import docsPlugin from "@hydyco/docs-plugin";
-import filePlugin from "@hydyco/file-plugin";
-import { useAuth } from "@hydyco/auth";
-const { HydycoAdmin } = require("@hydyco/admin-plugin");
-import welcomePage from "./extra/welcome";
+import { IConfig } from "../types/config";
+import { IKernel } from "../types/kernel";
+import { readObject } from "../utils/ioc";
+import { readAllMappingFiles } from "../main/file";
 
 export interface IServerConfig {
   port: number;
@@ -28,127 +27,83 @@ export class HydycoServer {
   private _hydycoServer: Application = express();
 
   /**
-   * Check if server is running or not
-   */
-  private _isServerStarted: boolean = false;
-
-  /**
-   * check if database is configured or not
-   */
-  private _dbAdded: boolean = false;
-
-  /**
    * configuration
    */
-  private _db: any;
-  private _middleware: Array<any> = [];
-  private _plugins: Array<any> = [filePlugin(), docsPlugin()];
+  private _config: IConfig;
 
-  private _routes: Array<any> = [];
+  constructor({
+    config,
+    kernel,
+    database,
+  }: {
+    config: IConfig;
+    kernel: IKernel;
+    database: any;
+  }) {
+    this._config = config;
+    this._hydycoServer.use(express.json());
 
-  constructor(
-    private serverConfig: IServerConfig = {
-      port: 3000,
-      logger: true,
-      auth: {
-        secretOrKey: "yourKey",
-      },
-      cors: {},
-    }
-  ) {
-    this._hydycoServer.use(express.json()); // parse body json
-    if (this.serverConfig.logger) {
-      this._hydycoServer.use(morgan("dev"));
-    }
-    this._middleware.push(cors(this.serverConfig.cors));
-    this._middleware.push(
-      useAuth({ secretOrKey: this.serverConfig.auth.secretOrKey })
+    const restModel = readObject(kernel, "routes.restModule");
+    const overrides = readObject(kernel, "routes.overrides");
+    const baseUrl = readObject(kernel, "routes.baseUrl");
+    const routesHandler: any = readObject(kernel, "database.routesHandler");
+    const namedMiddleware: any = readObject(
+      kernel,
+      "middleware.namedMiddleware"
     );
-  }
 
-  /**
-   * Register database
-   * Database are instance of express app
-   * @param {App} - Instance of express app or express app or even node http server
-   */
-  registerDatabase(database: Router) {
-    this._dbAdded = true;
-    this._db = database;
-  }
+    if (this._config.server.logger) {
+      this._hydycoServer.use(morgan(config.server.loggerMode));
+    }
 
-  /**
-   * Register plugins
-   * plugins are instance of express app
-   * @param {App} - Instance of express app or express app or even node http server
-   */
-  registerPlugins(plugins: Array<Router>) {
-    if (this._isServerStarted)
-      throw new Error(
-        "Server is running, cannot register plugin after server is started"
-      );
-    this._plugins = [...this._plugins, ...plugins];
-  }
+    this._hydycoServer.use("/admin", database);
 
-  /**
-   * Register middleware
-   * middleware are instance of express app
-   * @param {App} - Instance of express app or express app or even node http server
-   */
-  registerMiddleware(middleware: Array<Router>) {
-    if (this._isServerStarted)
-      throw new Error(
-        "Server is running, cannot register middleware after server is started"
-      );
-    this._middleware = [...this._middleware, ...middleware];
-  }
+    this._hydycoServer.use([
+      cors(this._config.cors),
+      ...kernel.middleware.globalMiddleware,
+    ]);
 
-  /**
-   * Register routes
-   * @param {HydycoModel} - Type of HydycoModel
-   */
-  registerRoutes(routes: Array<any>): void {
-    if (this._isServerStarted)
-      throw new Error(
-        "Server is running, cannot register routes after server is started"
-      );
-    this._routes = routes;
+    if (Array.isArray(kernel.plugins)) {
+      kernel.plugins.forEach((plugin: any) => {
+        if (typeof plugin === "object") {
+          plugin.serverPath = plugin.serverPath ? plugin.serverPath : "";
+          let module = plugin.module;
+          module = plugin.invoke ? module(plugin.config) : module;
+          this._hydycoServer.use(plugin.serverPath, module);
+        }
+      });
+    }
+
+    const routes = AutoRoutes(
+      restModel,
+      routesHandler,
+      namedMiddleware["authMiddleware"],
+      overrides
+    );
+
+    this._hydycoServer.use(`${baseUrl}`, routes);
   }
 
   /**
    * Start Hydyco Server
    */
   start() {
-    if (!this._dbAdded)
-      throw new Error("You need to register database before starting server");
-
-    this._hydycoServer.use("/admin", this._db);
-
-    this._hydycoServer.use(HydycoAdmin);
-
-    this._plugins.forEach((plugin) => this._hydycoServer.use("/admin", plugin));
-
-    this._middleware.forEach((middleware) =>
-      this._hydycoServer.use(middleware)
-    );
-
-    this._routes.forEach((route) => this._hydycoServer.use(route));
-
-    this._hydycoServer.use(welcomePage);
-
-    this._hydycoServer.listen(this.serverConfig.port, () => {
-      this._isServerStarted = true;
+    this._hydycoServer.listen(this._config.server.port, () => {
       console.log(
-        boxen("Server started at http://localhost:" + this.serverConfig.port, {
-          padding: 1,
-          margin: 1,
-          borderStyle: "double",
-          borderColor: "yellow",
-        })
+        boxen(
+          "Server started at http://localhost:" + this._config.server.port,
+          {
+            padding: 1,
+            margin: 1,
+            borderStyle: "double",
+            borderColor: "yellow",
+          }
+        )
       );
       console.log(
         boxen(
           "Admin ui at http://localhost:" +
-            this.serverConfig.port +
+            this._config.server.port +
             "/admin-ui",
           { padding: 1, margin: 1, borderStyle: "double", borderColor: "green" }
         )
@@ -156,3 +111,37 @@ export class HydycoServer {
     });
   }
 }
+
+/**
+ * Get all mongoose express routes
+ */
+const AutoRoutes = (
+  restModule: any,
+  routesHandler: Function,
+  authHandler: Function,
+  overRides: any
+) => {
+  const routes: any = {};
+  const files = readAllMappingFiles();
+  files.forEach((file: any) => {
+    if (file.show) {
+      if (overRides[file.name]) {
+        const RestClass = overRides[file.name];
+        routes[file.name] = new RestClass({
+          modelName: file.name,
+          routesHandler,
+          authHandler,
+        });
+      } else {
+        routes[file.name] = new restModule({
+          modelName: file.name,
+          routesHandler,
+          authHandler,
+        });
+      }
+    }
+  });
+  return Object.values(routes).map((r: any) => {
+    return r.Routes();
+  });
+};

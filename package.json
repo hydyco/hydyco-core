@@ -13,6 +13,7 @@
     "@hydyco/auth": "^0.0.9",
     "@hydyco/docs-plugin": "^0.0.9",
     "@hydyco/file-plugin": "^0.0.9",
+    "awilix": "^5.0.1",
     "boxen": "^5.0.1",
     "camel-case": "^4.1.2",
     "cors": "^2.8.5",
