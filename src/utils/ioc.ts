@@ -14,7 +14,7 @@ export const reduceIOCArray = (array: Array<any>) => {
  * @param {Object} object
  * @param {string} key - key to find value on object
  */
-export const readObject = (object: any, key: string) => {
+export const readObject = (object: Object, key: string) => {
   key = key.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
   key = key.replace(/^\./, ""); // strip a leading dot
   var a = key.split(".");

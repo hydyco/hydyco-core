@@ -11,9 +11,10 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./",
-    "strict": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noImplicitUseStrict": true,
+    "resolveJsonModule": true
   }
 }

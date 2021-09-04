@@ -1,10 +1,10 @@
 export interface IKernel {
   database: NameMiddlewareOrDatabase;
   middleware: Middleware;
-  plugins: [];
+  plugins?: null[] | null;
 }
 export interface NameMiddlewareOrDatabase {}
 export interface Middleware {
-  globalMiddleware: [];
+  globalMiddleware?: null[] | null;
   nameMiddleware: NameMiddlewareOrDatabase;
 }

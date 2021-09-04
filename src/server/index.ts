@@ -46,12 +46,9 @@ export class HydycoServer {
     const restModel = readObject(kernel, "routes.restModule");
     const overrides = readObject(kernel, "routes.overrides");
     const baseUrl = readObject(kernel, "routes.baseUrl");
-    const routesHandler: any = readObject(kernel, "database.routesHandler");
-    const namedMiddleware: any = readObject(
-      kernel,
-      "middleware.namedMiddleware"
-    );
-
+    const routesHandler = readObject(kernel, "database.routesHandler");
+    const namedMiddleware = readObject(kernel, "middleware.namedMiddleware");
+    const HydycoModel = readObject(kernel, "database.model");
     if (this._config.server.logger) {
       this._hydycoServer.use(morgan(config.server.loggerMode));
     }
@@ -68,7 +65,7 @@ export class HydycoServer {
         if (typeof plugin === "object") {
           plugin.serverPath = plugin.serverPath ? plugin.serverPath : "";
           let module = plugin.module;
-          module = plugin.invoke ? module(plugin.config) : module;
+          module = plugin.invoke ? module(plugin.config, HydycoModel) : module;
           this._hydycoServer.use(plugin.serverPath, module);
         }
       });
@@ -115,13 +112,8 @@ export class HydycoServer {
 /**
  * Get all mongoose express routes
  */
-const AutoRoutes = (
-  restModule: any,
-  routesHandler: Function,
-  authHandler: Function,
-  overRides: any
-) => {
-  const routes: any = {};
+const AutoRoutes = (restModule, routesHandler, authHandler, overRides = {}) => {
+  const routes = {};
   const files = readAllMappingFiles();
   files.forEach((file: any) => {
     if (file.show) {
