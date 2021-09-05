@@ -39,4 +39,20 @@ export const getConfig = (path: string | undefined) => {
   return path ? readObject(config, path) : config;
 };
 
+export const middleware = (name: string | Array<string>) => {
+  const namedMiddleware: any = readObject(
+    HydycoContainer.resolve("kernel"),
+    "middleware.namedMiddleware"
+  );
+  if (typeof name === "string") {
+    return namedMiddleware[name];
+  } else if (Array.isArray(name)) {
+    return namedMiddleware.reduce((prev, curr) => {
+      const m = namedMiddleware[curr];
+      return [...prev, m];
+    }, []);
+  }
+  return;
+};
+
 export const server = HydycoContainer.resolve("server");
