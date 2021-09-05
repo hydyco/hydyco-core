@@ -4,7 +4,7 @@
 export const reduceIOCArray = (array: Array<any>) => {
   return array.reduce((prev, curr) => {
     const { name, path } = curr;
-    prev = { ...prev, [name]: require(path).default };
+    prev = { ...prev, [name]: require(path).default || require(path) };
     return prev;
   }, {});
 };
