@@ -48,7 +48,9 @@ export class HydycoServer {
     const baseUrl = readObject(kernel, "routes.baseUrl");
     const routesHandler = readObject(kernel, "database.routesHandler");
     const namedMiddleware = readObject(kernel, "middleware.namedMiddleware");
+    const customRoutes: any = readObject(kernel, "routes.customRoutes");
     const HydycoModel = readObject(kernel, "database.model");
+
     if (this._config.server.logger) {
       this._hydycoServer.use(morgan(config.server.loggerMode));
     }
@@ -78,7 +80,7 @@ export class HydycoServer {
       overrides
     );
 
-    this._hydycoServer.use(`${baseUrl}`, routes);
+    this._hydycoServer.use(`${baseUrl}`, [...routes, ...customRoutes]);
   }
 
   /**
